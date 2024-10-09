@@ -1,0 +1,5 @@
+{
+    "workbench.settings.editor": "json",
+    "python.analysis.diagnosticSeverityOverrides": {
+    "reportInvalidTypeForm": "none"},
+}
