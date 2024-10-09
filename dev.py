@@ -4,5 +4,6 @@ import numpy as np
 from scipy.signal import savgol_filter
 import matplotlib.pyplot as plt
 import pandas as pd
-import trig as trig
-import data_formatter as darform
+import lib.phys as phys
+import lib.trig as trig
+import lib.data_formatter as datform
