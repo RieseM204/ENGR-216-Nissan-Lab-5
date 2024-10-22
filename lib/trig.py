@@ -4,8 +4,8 @@ import numpy as np
 from scipy.signal import savgol_filter
 import matplotlib.pyplot as plt
 import pandas as pd
-import phys as phys
-import data_formatter as datform
+import lib.phys as phys
+import lib.data_formatter as datform
 
 def distance(A : np.ndarray(shape=(2,1)), B : np.ndarray(shape=(2,1))) -> float:
     """Takes two ordered pairs and returns the distance between them"""
@@ -24,7 +24,7 @@ def unit(v : np.ndarray(shape=(2,1))) -> np.ndarray(shape=(2,1)):
 def theta_between(A : np.ndarray(shape=(2,1)), B : np.ndarray(shape=(2,1))) -> float:
     """Takes two 2x1 vectors and returns the angle between them in radians"""
     AB_mag_prod = np.linalg.norm(A) * np.linalg.norm(B)
-    AB_dot = np.dot(A, B)
+    AB_dot = np.dot(A.T, B)
     theta = math.acos(AB_dot / AB_mag_prod)
     return theta
 

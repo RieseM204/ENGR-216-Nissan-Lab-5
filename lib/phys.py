@@ -4,8 +4,8 @@ import numpy as np
 from scipy.signal import savgol_filter
 import matplotlib.pyplot as plt
 import pandas as pd
-import trig as trig
-import data_formatter as darform
+import lib.trig as trig
+import lib.data_formatter as darform
 
 def momentum(m, v):
     """Calculates 1D momentum"""
@@ -33,14 +33,14 @@ def total_momentum(v_1, v_2, m_1, m_2):
     shape_1 = v_1.shape
     l_1 = shape_1[1]
     slices_1 = []
-    for i in range(shape_1):
+    for i in range(l_1):
         current_slice = v_1[:, i]
         slices_1.append(np.array(current_slice))
 
     shape_2 = v_2.shape
     l_2 = shape_2[1]
     slices_2 = []
-    for i in range(shape_2):
+    for i in range(l_2):
         current_slice = v_2[:, i]
         slices_2.append(np.array(current_slice))
 
