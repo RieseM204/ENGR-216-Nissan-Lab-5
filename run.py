@@ -13,10 +13,10 @@ import lib.data_formatter as datform
 def main() -> None:
     """Main function"""
     dev_list = []
+    k_dev_list = []
     ang_list = []
 
     for n in range(1, 41):
-        print(n)
         df = pd.read_csv(f"bin/trial_{n}.csv")
         df.drop(df.columns[20:], axis=1, inplace=True)
         df = df.dropna(axis='index', how='any')
@@ -66,8 +66,10 @@ def main() -> None:
 
             col_ang = trig.theta_between(DO_vi, G_vi)
             p_dev = phys.calc_deviation(DO_v, G_v, DO_m, G_m)
+            k_dev = phys.calc_KE_d(DO_v, G_v, DO_m, G_m)
             ang_list.append(float(col_ang))
             dev_list.append(float(p_dev))
+            k_dev_list.append(float(k_dev))
         except (IndexError, ValueError, TypeError):
             print(f"Invalid Trial: {n}")
             pass
@@ -81,14 +83,45 @@ def main() -> None:
     plt.plot(ang_list, trend_line, color='red', label="Trend Line")
     residuals = dev_list - trend_line
     std_dev = np.std(residuals)
-    print(f"std = {std_dev}")
+    print(f"std p = {std_dev}")
     plt.fill_between(ang_list, trend_line - std_dev, trend_line + std_dev, color='gray', alpha=0.3, label="±1 Std. Dev.")
-    plt.axvline(x=90, linestyle = '--', color = 'black', label='90 Degrees')
+    plt.axvline(x=90, linestyle = '--', color = 'green', label='90 Degrees')
+    plt.axhline(y=0, linestyle = '--', color = 'black', label='y = 0')
 
     plt.ylabel('Momentum Deviation')
     plt.xlabel('Angle (deg)')
     plt.title('Deviation of Momentum by Collision Angle')
     plt.legend()
+    plt.show()
+
+
+    plt.scatter(ang_list, k_dev_list, label='Deviation')
+
+    coefficients = np.polyfit(ang_list, k_dev_list, 1)
+    trend_line = np.polyval(coefficients, ang_list)
+    plt.plot(ang_list, trend_line, color='red', label="Trend Line")
+    residuals = k_dev_list - trend_line
+    std_dev = np.std(residuals)
+    print(f"std k = {std_dev}")
+    plt.fill_between(ang_list, trend_line - std_dev, trend_line + std_dev, color='gray', alpha=0.3, label="±1 Std. Dev.")
+    plt.axvline(x=90, linestyle = '--', color = 'green', label='90 Degrees')
+    plt.axhline(y=0, linestyle = '--', color = 'black', label='y = 0')
+
+    plt.ylabel('KE Deviation')
+    plt.xlabel('Angle (deg)')
+    plt.title('Deviation of Kinetic Energy by Collision Angle')
+    plt.legend()
+    plt.show()
+
+    plt.hist(dev_list, bins = int(math.sqrt(len(dev_list))))
+    plt.xlabel('Part Deviation of Momentum')
+    plt.ylabel('n')
+    plt.title('Histogram of Deviations from Conservation of Momentum')
+    plt.show()
+    plt.hist(k_dev_list, bins = int(math.sqrt(len(k_dev_list))))
+    plt.xlabel('Part Change in Total KE')
+    plt.ylabel('n')
+    plt.title('Histogram of Changes in Total Kinetic Energy')
     plt.show()
 
 if __name__ == "__main__":
